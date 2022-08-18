@@ -21,3 +21,15 @@
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
+/.idea/.gitignore
+/out/production/BEAT_BOX/.idea/.gitignore
+/out/production/BEAT_BOX/.gitignore
+/.idea/BEAT_BOX.iml
+/out/production/BEAT_BOX/.idea/BEAT_BOX.iml
+/.idea/misc.xml
+/out/production/BEAT_BOX/.idea/misc.xml
+/.idea/modules.xml
+/out/production/BEAT_BOX/.idea/modules.xml
+/out/production/BEAT_BOX/README.md
+/.idea/vcs.xml
+/out/production/BEAT_BOX/.idea/vcs.xml

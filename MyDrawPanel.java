@@ -1,23 +1,8 @@
 import java.awt.*;
 import javax.swing.*;
 
-public class MyDrawPanel extends JPanel // создаём личный виджет
+class MyDrawPanel extends JPanel // создаём личный виджет
 {
-    public static void main(String[] args)
-    {
-        MyDrawPanel panel = new MyDrawPanel();
-        panel.go();
-    }
-
-    public void go()
-    {
-        JFrame frame = new JFrame();
-        frame.getContentPane().add(this);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(300, 300);
-        frame.setVisible(true);
-    }
-
     public void paintComponent(Graphics g) // Graphics2D замаскированный под Graphics
     {
         Graphics2D g2d = (Graphics2D) g;

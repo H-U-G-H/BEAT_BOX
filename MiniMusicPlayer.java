@@ -7,15 +7,16 @@ public class MiniMusicPlayer
     static JFrame frame = new JFrame("МОЙ ПЕРВЫЙ МУЗЫКАЛЬНЫЙ КЛИП");
     static DrawPanel panel;
 
-    public static void main(String[] args)
+    public static void main(String[] args) // БЛОК ЗАПУСКА ПРОГРАММЫ
     {
         MiniMusicPlayer mini = new MiniMusicPlayer();
         mini.go();
     } // OUT OF MAIN METHOD
 
-    public void setUpGui()
+    public void setUpGui() // ИНИЦИАЛИЗАЦИЯ И НАСТРОЙКА
     {
         panel = new DrawPanel();
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setContentPane(panel);
         frame.setBounds(30, 30, 300, 300);
         frame.setVisible(true);
@@ -27,9 +28,9 @@ public class MiniMusicPlayer
 
         try
         {
-            Sequencer sequencer = MidiSystem.getSequencer();
-            sequencer.open();
-            sequencer.addControllerEventListener(panel, new int[] {127});
+            Sequencer player = MidiSystem.getSequencer();
+            player.open();
+            player.addControllerEventListener(panel, new int[] {127}); // ПОДПИСКА НА СПИСОК СОБЫТИЙ
             Sequence sequence = new Sequence(Sequence.PPQ, 4);
             Track track = sequence.createTrack();
 
@@ -39,12 +40,13 @@ public class MiniMusicPlayer
             {
                 r = (int)((Math.random() * 50) + 1);
                 track.add(makeEvent(144, 1, r, 100, i));
-                track.add(makeEvent(176, 1, 127, 0, i));
+                track.add(makeEvent(176, 1, 127, 0, i)); // СОБЫТИЕ КОТОРОЕ ОТСЛЕЖИВАЕМ
                 track.add(makeEvent(128, 1, r, 100, i + 2));
             } // OUT OF LOOP
-            sequencer.setSequence(sequence);
-            sequencer.start();
-            sequencer.setTempoInBPM(120);
+
+            player.setSequence(sequence);
+            player.start();
+            player.setTempoInBPM(120);
         }
         catch (Exception exception)
         {
@@ -52,14 +54,14 @@ public class MiniMusicPlayer
         } // OUT OF TRY-CATCH
     } // OUT OF GO METHOD
 
-    public MidiEvent makeEvent (int comd, int chan, int one, int two, int tick)
+    public MidiEvent makeEvent (int cmd, int chan, int one, int two, int tick) // АТОМАТИЗАЦИЯ MIDI СОБЫТИЙ
     {
         MidiEvent event = null;
 
         try
         {
             ShortMessage message = new ShortMessage();
-            message.setMessage(comd, chan, one, two);
+            message.setMessage(cmd, chan, one, two);
             event = new MidiEvent(message, tick);
         }
         catch(Exception exception)
@@ -70,17 +72,17 @@ public class MiniMusicPlayer
         return event;
     } // OUT OF METHOD
 
-    class DrawPanel extends JPanel implements ControllerEventListener
+    class DrawPanel extends JPanel implements ControllerEventListener // РЕАЛИЗАЦИЯ ИНТЕРФЕЙСА СЛУШАТЕЛЯ
     {
         boolean msg = false;
 
-        public void controlChange(ShortMessage event)
+        public void controlChange(ShortMessage event) // РЕАЛИЗАЦИЯ АБСТРАКТНОГО МЕТОДА
         {
             msg = true;
             repaint();
         }
 
-        public void paintComponent (Graphics g)
+        public void paintComponent (Graphics g) // ПЕРЕОПРЕДЕЛЯЕМ УНАСЛЕДОВАННЫЙ МЕТОД
         {
             if (msg)
             {
@@ -103,4 +105,4 @@ public class MiniMusicPlayer
             } //OUT OF IF
         } // OUT OF METHOD
     } // OUT OF INNER CLASS
-}
+} // OUT OF OUTER CLASS

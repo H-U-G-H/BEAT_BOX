@@ -20,6 +20,9 @@ public class TextAreaTest implements ActionListener
         frame.setVisible(true);
 
         JPanel panel = new JPanel();
+        JPanel panel1 = new JPanel();
+
+        JCheckBox checkBox = new JCheckBox("Goes to 11");
         JButton button = new JButton("Just click it");
         button.addActionListener(this);
         area = new JTextArea(10, 20);
@@ -30,6 +33,8 @@ public class TextAreaTest implements ActionListener
         scroller.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 
         panel.add(scroller);
+        panel1.add(checkBox);
+        frame.getContentPane().add(BorderLayout.NORTH, panel1);
         frame.getContentPane().add(BorderLayout.CENTER, panel);
         frame.getContentPane().add(BorderLayout.SOUTH, button);
     } // OUT OF GO CLASS

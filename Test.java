@@ -1,45 +1,38 @@
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class Test
 {
-    int x = 1;
-    int y = 1;
+    JFrame frame;
+    JPanel panel;
+    String [] listEntries = {"альфа", "бета", "гамма", "дельта", "эпсилон", "зета", "ета", "тета"};
+    JList list = new JList(listEntries);
 
     public static void main(String[] args)
     {
-        Test test = new Test();
-        test.go();
-    } // OUT OF MAIN METHOD
-
+        Test gui = new Test();
+        gui.go();
+    }
+    
     public void go()
     {
-        JFrame frame = new JFrame();
+        frame = new JFrame();
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        MyDrawPanel drawP = new MyDrawPanel();
-        frame.getContentPane().add(drawP);
-        frame.setSize(500, 270);
+        frame.setSize(250, 250);
         frame.setVisible(true);
 
-        for (int i = 0; i < 124; i++, x++, y++)
-        {
-            x++;
-            drawP.repaint();
+        panel = new JPanel();
+        JScrollPane scroller = new JScrollPane(list);
+        scroller.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+        scroller.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 
-            try {
-                Thread.sleep(50);
-            } catch (Exception ex) {}
-        } // OUT OF LOOP
-    } // OUT OF METHOD
+        list.setVisibleRowCount(4);
+        list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
-    class MyDrawPanel extends JPanel
-    {
-        public void paintComponent(Graphics g)
-        {
-            g.setColor(Color.white);
-            g.fillRect(0, 0, 500, 250);
-            g.setColor(Color.blue);
-            g.fillRect(x, y, 500 - x * 2, 250 - y * 2);
-        } // OUT OF METHOD
-    } // OUT OF INNER CLASS
-} // OUT OF OUTER CLASS
+        panel.add(scroller);
+        frame.getContentPane().add(BorderLayout.CENTER, panel);
+
+    } // OUT OF GO CLASS
+}

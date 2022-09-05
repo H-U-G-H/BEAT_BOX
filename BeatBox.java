@@ -89,7 +89,7 @@ public class BeatBox
 
         setUpMidi();
 
-        frame.setBounds(50, 50, 300, 300);
+        frame.setBounds(50, 50, 50, 50);
         frame.pack();
         frame.setVisible(true);
     } // OUT OF BUILDING GUI

@@ -38,7 +38,7 @@ public class BeatBox
         background.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         // ПУСТАЯ ГРАНИЦА ПОЗВОЛЯЕТ СОЗДАТЬ ПОЛЯ МЕЖДУ КРАЯМИ ПАНЕЛИ И МЕСТОМ РАЗМЕЩЕНИЯ КОМПОНЕНТОВ
 
-        checkboxList = new ArrayList<JCheckBox>();
+        checkboxList = new ArrayList<>();
 
         // --------------- БЛОК BUTTON BOX ---------------
         Box buttonBox = new Box(BoxLayout.Y_AXIS);
@@ -122,7 +122,7 @@ public class BeatBox
     public void buildTrackAndStart()
     {
         // СОЗДАЁМ МАССИВ ИЗ 16 ЭЛЕМЕНТОВ, ЧТОБЫ ХРАНИТЬ ЗНАЧЕНИЯ ДЛЯ КАЖДОГО ИНСТРУМЕНТА, НА ВСЕ 16 ТАКТОВ
-        int [] trackList = null;
+        int [] trackList;
 
         // ИЗБАВЛЯЕМСЯ ОТ СТАРОЙ ДОРОЖКИ И СОЗДАЁМ НОВУЮ
         sequence.deleteTrack(track);
@@ -135,7 +135,7 @@ public class BeatBox
 
             for (int j = 0; j < 16; j++) // ДЛЯ КАЖДОГО ТАКТА ТЕКУЩЕГО РЯДА...
             {
-                JCheckBox jcb = (JCheckBox) checkboxList.get(j + (16*i));
+                JCheckBox jcb = checkboxList.get(j + (16*i));
 
                 /* УСТАНОВЛЕН ЛИ ФЛАЖОК НА ЭТОМ ТАКТЕ? ЕСЛИ ДА, ТО ПОМЕЩАЕМ ЗНАЧЕНИЕ КЛАВИШИ
                 В ТЕКУЩУЮ ЯЧЕЙКУ МАССИВА (ЯЧЕЙКУ, КОТОРАЯ ПРЕДСТАВЛЯЕТ ТАКТ). ЕСЛИ НЕТ,
@@ -213,7 +213,7 @@ public class BeatBox
 
             try
             {
-                FileOutputStream fos = new FileOutputStream(new File("checkbox.ser")); // ПОТОК СОЕДИНЕНИЯ
+                FileOutputStream fos = new FileOutputStream("checkbox.ser"); // ПОТОК СОЕДИНЕНИЯ
                 ObjectOutputStream oos = new ObjectOutputStream(fos); // ЦЕПНОЙ ПОТОК
                 oos.writeObject(checkboxState); // ЗАПИСЬ ОБЪЕКТА В ФАЙЛ
                 oos.close(); // ЗАКРЫТИЕ ПОТОКА
@@ -232,7 +232,7 @@ public class BeatBox
             boolean[] checkboxState = null; // ОБЪЯВЛЕНИЕ МАССИВА
             try
             {
-                FileInputStream fis = new FileInputStream(new File("checkbox.ser")); // ПОТОК СОЕДИНЕНИЯ
+                FileInputStream fis = new FileInputStream("checkbox.ser"); // ПОТОК СОЕДИНЕНИЯ
                 ObjectInputStream ois = new ObjectInputStream(fis); // ЦЕПНОЙ ПОТОК
                 checkboxState = (boolean[]) ois.readObject(); // ЗАГРУЗКА ОБЪЕКТА
             }
@@ -244,14 +244,8 @@ public class BeatBox
             for (int i = 0; i < 256; i++)
             {
                 JCheckBox check = checkboxList.get(i); // ПОМЕСТИТЬ ЧЕКБОКС В ЛОКАЛЬНУЮ ПЕРЕМЕННУЮ
-                if(checkboxState[i]) // ЕСЛИ СОСТОЯНИЕ TRUE
-                {
-                    check.setSelected(true); // УСТАНОВИТЬ МАРКЕР
-                }
-                else // ИНАЧЕ...
-                {
-                    check.setSelected(false); // УБРАТЬ МАРКЕР
-                } // OUT OF IF-ELSE
+                assert checkboxState != null;
+                check.setSelected(checkboxState[i]); // УСТАНОВИТЬ МАРКЕР
             } // OUT OF LOOP
             sequencer.stop(); // ОСТАНОВИТЬ ВОПРОИЗВЕДЕНИЕ
             buildTrackAndStart(); // РЕБИЛД И ЗАПУСК ДОРОЖКИ

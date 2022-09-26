@@ -211,9 +211,12 @@ public class BeatBox
                 if (check.isSelected()) checkboxState[i] = true; // ЕСЛИ МАРКЕР УСТАНОВЛЕН - ДУБЛИРУЕМ
             } // OUT OF LOOP
 
+            JFileChooser saver = new JFileChooser();
+            saver.showSaveDialog(frame);
+
             try
             {
-                FileOutputStream fos = new FileOutputStream("checkbox.ser"); // ПОТОК СОЕДИНЕНИЯ
+                FileOutputStream fos = new FileOutputStream(saver.getSelectedFile()); // ПОТОК СОЕДИНЕНИЯ
                 ObjectOutputStream oos = new ObjectOutputStream(fos); // ЦЕПНОЙ ПОТОК
                 oos.writeObject(checkboxState); // ЗАПИСЬ ОБЪЕКТА В ФАЙЛ
                 oos.close(); // ЗАКРЫТИЕ ПОТОКА
@@ -230,9 +233,13 @@ public class BeatBox
         public void actionPerformed(ActionEvent event)
         {
             boolean[] checkboxState = null; // ОБЪЯВЛЕНИЕ МАССИВА
+
+            JFileChooser loader = new JFileChooser();
+            loader.showOpenDialog(frame);
+
             try
             {
-                FileInputStream fis = new FileInputStream("checkbox.ser"); // ПОТОК СОЕДИНЕНИЯ
+                FileInputStream fis = new FileInputStream(loader.getSelectedFile()); // ПОТОК СОЕДИНЕНИЯ
                 ObjectInputStream ois = new ObjectInputStream(fis); // ЦЕПНОЙ ПОТОК
                 checkboxState = (boolean[]) ois.readObject(); // ЗАГРУЗКА ОБЪЕКТА
             }

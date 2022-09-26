@@ -200,14 +200,14 @@ public class BeatBox
         }
     } // OUT OF INNER CLASS
 
-    public class LoadListener implements ActionListener // СЛУШАТЕЛЬ ДЛЯ СЕРИАЛИЗАЦИИ
+    public class SaveListener implements ActionListener // СЛУШАТЕЛЬ ДЛЯ СЕРИАЛИЗАЦИИ
     {
         public void actionPerformed(ActionEvent event) // РЕАЛИЗАЦИЯ МЕТОДА ИНТЕРФЕЙСА
         {
             boolean[] checkboxState = new boolean[256]; // СОЗДАЁТСЯ БУЛЕВ МАССИВ ДЛЯ ХРАНЕНИЯ СОСТОЯНИЙ
             for (int i = 0; i < 256 ; i++) // ПРОБЕГАЕМСЯ ПО ЕГО ЭЛЕМЕНТАМ
             {
-                JCheckBox check = (JCheckBox) checkboxList.get(i);
+                JCheckBox check = checkboxList.get(i);
                 if (check.isSelected()) checkboxState[i] = true; // ЕСЛИ МАРКЕР УСТАНОВЛЕН - ДУБЛИРУЕМ
             } // OUT OF LOOP
 
@@ -222,8 +222,41 @@ public class BeatBox
             {
                 exc.printStackTrace(); // ПОКАЗАТЬ ПУТЬ ОШИБКИ
             } // OUT OF TRY-CATCH
-        } // OUT OF INNER CLASS
-    }
+        } // OUT OF METHOD
+    } // OUT OF INNER CLASS
+
+    public class LoadListener implements ActionListener // СЛУШАТЕЛЬ ДЛЯ ДЕСЕРИАЛИЗАЦИИ
+    {
+        public void actionPerformed(ActionEvent event)
+        {
+            boolean[] checkboxState = null; // ОБЪЯВЛЕНИЕ МАССИВА
+            try
+            {
+                FileInputStream fis = new FileInputStream(new File("checkbox.ser")); // ПОТОК СОЕДИНЕНИЯ
+                ObjectInputStream ois = new ObjectInputStream(fis); // ЦЕПНОЙ ПОТОК
+                checkboxState = (boolean[]) ois.readObject(); // ЗАГРУЗКА ОБЪЕКТА
+            }
+            catch (Exception exception) // ОБРАБОТКА ИСКЛЮЧЕНИЙ
+            {
+                exception.printStackTrace(); // ВЫВЕСТИ ПУТЬ ОШИБКИ
+            } // OUT OF TRY-CATCH
+
+            for (int i = 0; i < 256; i++)
+            {
+                JCheckBox check = checkboxList.get(i); // ПОМЕСТИТЬ ЧЕКБОКС В ЛОКАЛЬНУЮ ПЕРЕМЕННУЮ
+                if(checkboxState[i]) // ЕСЛИ СОСТОЯНИЕ TRUE
+                {
+                    check.setSelected(true); // УСТАНОВИТЬ МАРКЕР
+                }
+                else // ИНАЧЕ...
+                {
+                    check.setSelected(false); // УБРАТЬ МАРКЕР
+                } // OUT OF IF-ELSE
+            } // OUT OF LOOP
+            sequencer.stop(); // ОСТАНОВИТЬ ВОПРОИЗВЕДЕНИЕ
+            buildTrackAndStart(); // РЕБИЛД И ЗАПУСК ДОРОЖКИ
+        }// OUT OF METHOD
+    } // OUT OF INNER CLASS
     // --------------- БЛОК СЛУШАТЕЛЕЙ ---------------
 
     /* МЕТОД СОЗДАЁТ СОБЫТИЯ ДЛЯ ОДНОГО ИНСТРУМЕНТА ЗА КАЖДЫЙ ПРОХОД ЦИКЛА ДЛЯ ВСЕХ 16 ТАКТОВ.

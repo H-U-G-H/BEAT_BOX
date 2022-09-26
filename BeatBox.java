@@ -59,11 +59,11 @@ public class BeatBox
         downTempo.addActionListener(new MyDownTempoListener());
         buttonBox.add(downTempo);
 
-        JButton serializeIt = new JButton("SERIALIZE");
+        JButton serializeIt = new JButton("SAVE");
         serializeIt.addActionListener(new SaveListener());
         buttonBox.add(serializeIt);
 
-        JButton restore = new JButton("RESTORE");
+        JButton restore = new JButton("LOAD");
         restore.addActionListener(new LoadListener());
         buttonBox.add(restore);
         // --------------- БЛОК BUTTON BOX ---------------
@@ -82,8 +82,8 @@ public class BeatBox
 
         // --------------- БЛОК MAIN PANEL ---------------
         GridLayout grid = new GridLayout(16, 16);
-        grid.setVgap(1);
-        grid.setHgap(2);
+        grid.setVgap(1); // ВЕРТИКАЛЬНЫЙ ОТСТУП В СЕТКЕ
+        grid.setHgap(2); // ГОРИЗОНТАЛЬНЫЙ ОТСТУП В СЕТКЕ
         mainPanel = new JPanel(grid);
         background.add(BorderLayout.CENTER, mainPanel);
 

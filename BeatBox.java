@@ -3,6 +3,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.*;
 import java.util.*;
 
 public class BeatBox
@@ -57,6 +58,14 @@ public class BeatBox
         JButton downTempo = new JButton("TEMPO DOWN");
         downTempo.addActionListener(new MyDownTempoListener());
         buttonBox.add(downTempo);
+
+        JButton serializeIt = new JButton("SERIALIZE");
+        serializeIt.addActionListener(new SaveListener());
+        buttonBox.add(serializeIt);
+
+        JButton restore = new JButton("RESTORE");
+        restore.addActionListener(new LoadListener());
+        buttonBox.add(restore);
         // --------------- БЛОК BUTTON BOX ---------------
 
         // --------------- БЛОК NAME BOX ---------------
@@ -190,6 +199,31 @@ public class BeatBox
             sequencer.setTempoFactor((float) (tempoFactor * 0.97)); // УМЕНЬШАЕМ ТЕМП НА 3%
         }
     } // OUT OF INNER CLASS
+
+    public class LoadListener implements ActionListener // СЛУШАТЕЛЬ ДЛЯ СЕРИАЛИЗАЦИИ
+    {
+        public void actionPerformed(ActionEvent event) // РЕАЛИЗАЦИЯ МЕТОДА ИНТЕРФЕЙСА
+        {
+            boolean[] checkboxState = new boolean[256]; // СОЗДАЁТСЯ БУЛЕВ МАССИВ ДЛЯ ХРАНЕНИЯ СОСТОЯНИЙ
+            for (int i = 0; i < 256 ; i++) // ПРОБЕГАЕМСЯ ПО ЕГО ЭЛЕМЕНТАМ
+            {
+                JCheckBox check = (JCheckBox) checkboxList.get(i);
+                if (check.isSelected()) checkboxState[i] = true; // ЕСЛИ МАРКЕР УСТАНОВЛЕН - ДУБЛИРУЕМ
+            } // OUT OF LOOP
+
+            try
+            {
+                FileOutputStream fos = new FileOutputStream(new File("checkbox.ser")); // ПОТОК СОЕДИНЕНИЯ
+                ObjectOutputStream oos = new ObjectOutputStream(fos); // ЦЕПНОЙ ПОТОК
+                oos.writeObject(checkboxState); // ЗАПИСЬ ОБЪЕКТА В ФАЙЛ
+                oos.close(); // ЗАКРЫТИЕ ПОТОКА
+            }
+            catch (Exception exc)
+            {
+                exc.printStackTrace(); // ПОКАЗАТЬ ПУТЬ ОШИБКИ
+            } // OUT OF TRY-CATCH
+        } // OUT OF INNER CLASS
+    }
     // --------------- БЛОК СЛУШАТЕЛЕЙ ---------------
 
     /* МЕТОД СОЗДАЁТ СОБЫТИЯ ДЛЯ ОДНОГО ИНСТРУМЕНТА ЗА КАЖДЫЙ ПРОХОД ЦИКЛА ДЛЯ ВСЕХ 16 ТАКТОВ.
